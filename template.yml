@@ -5,7 +5,7 @@ Description: IAM Role
 # Parameters
 #-----------------------------
 Parameters:
-  Prefix:
+  NamePrefix:
     Type: String
     Default: "krzmknt"
   Environment:
