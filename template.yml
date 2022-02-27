@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: IAM Role
+
+#-----------------------------
+# Parameters
+#-----------------------------
+Parameters:
+  Prefix:
+    Type: String
+    Default: "krzmknt"
+  Environment:
+    Type: String
+    Default: "prd"
+
+#-----------------------------
+# Outputs
+#-----------------------------
+Outputs:
+  LambdaCommonRoleArn:
+    Value: !GetAtt LambdaCommonRole.Arn
+    Export:
+      Name: LambdaCommonRoleArn
+
+
+Resources:
+#-----------------------------
+# Lambda Common
+#-----------------------------
+  LambdaCommonRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${NamePrefix}-role-lambda-common
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: !Sub ${NamePrefix}-policy-lambda-common
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - logs:CreateExportTask
+                  - s3:GetBucketAcl
+                  - s3:PutObject
+                  - ec2:CreateNetworkInterface
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DeleteNetworkInterface
+
